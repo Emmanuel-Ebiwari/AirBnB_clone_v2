@@ -9,7 +9,7 @@ from datetime import datetime
 
 
 def do_pack():
-    """"creating a .tgz archive of the AirBnB web_static folder 
+    """"creating a .tgz archive of the AirBnB web_static folder
         with a timestamp
     """
     date = datetime.now()
