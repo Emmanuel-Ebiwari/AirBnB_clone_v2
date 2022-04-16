@@ -50,6 +50,7 @@ def do_deploy(archive_path):
     except err:
         return False
 
+
 def deploy():
     """ create and distribute an archive to the web servers """
     archive_path = do_pack()
