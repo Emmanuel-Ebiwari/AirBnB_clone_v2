@@ -1,28 +1,43 @@
 #!/usr/bin/python3
 """
-starts a Flask web application
+Routes:
+    /states: HTML page with a list of all State objects.
+    /states/<id>: HTML page displaying the given state with <id>.
 """
-
-from flask import Flask, render_template
-from models import *
 from models import storage
+from flask import Flask
+from flask import render_template
+
 app = Flask(__name__)
 
 
-@app.route('/states', strict_slashes=False)
-@app.route('/states/<state_id>', strict_slashes=False)
-def states(state_id=None):
-    """display the states and cities listed in alphabetical order"""
+@app.route("/states", strict_slashes=False)
+def states():
+    """
+    Displays a HTML page with a list of all states
+    """
     states = storage.all("State")
-    if state_id is not None:
-        state_id = 'State.' + state_id
-    return render_template('9-states.html', states=states, state_id=state_id)
+    return render_template("9-states.html", state=states)
+
+
+@app.route("/states/<id>", strict_slashes=False)
+def states_by_id(id):
+    """
+    Displays a HTML page with state that matches id if exists
+    """
+    for state in storage.all("State").values():
+        if state.id == id:
+            return render_template("9-states.html", state=state)
+    return render_template("9-states.html")
 
 
 @app.teardown_appcontext
-def teardown_db(exception):
-    """closes the storage on teardown"""
+def teardown(exc):
+    """
+    Remove current SQLAlchemy session
+    """
     storage.close()
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port='5000')
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0")
